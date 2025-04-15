@@ -10,6 +10,7 @@ const store = configureStore({
     isPreload: isPreloadReducer,
     users: usersReducer,
     threads: threadsReducer,
-    
   },
 });
+
+export default store;

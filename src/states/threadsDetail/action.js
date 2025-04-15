@@ -46,6 +46,21 @@ function asyncReceiveThreadDetail(threadId) {
 function asyncToggleLikeThreadDetail() {
   return async (dispatch, getState) => {
     const { authUser, threadDetail } = getState();
-      
+    dispatch(toggleLikeThreadDetailActionCreator(authUser.id));
+
+    try {
+      await api.toggleLikeThread(threadDetail.id);
+    } catch (error) {
+      alert(error.message);
+    }
   };
 }
+
+export {
+  ActionType,
+  receiveThreadDetailActionCreator,
+  clearThreadDetailActionCreator,
+  toggleLikeThreadDetailActionCreator,
+  asyncReceiveThreadDetail,
+  asyncToggleLikeThreadDetail,
+};

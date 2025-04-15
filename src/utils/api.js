@@ -1,5 +1,5 @@
 const api = (() => {
-  const BASE_URL = 'https://openspace-api.netlify.app/v1';
+  const BASE_URL = 'https://forum-api.dicoding.dev/v1';
 
   async function _fetchWithAuth(url, options = {}) {
     return fetch(url, {
@@ -19,15 +19,15 @@ const api = (() => {
     return localStorage.getItem('accessToken');
   }
 
-  async function register({ id, name, password }) {
-    const response = await fetch(`${BASE_URL}/users`, {
+  async function register({ name, email, password }) {
+    const response = await fetch(`${BASE_URL}/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        id,
         name,
+        email,
         password,
       }),
     });
@@ -46,14 +46,14 @@ const api = (() => {
     return user;
   }
 
-  async function login({ id, password }) {
+  async function login({ email, password }) {
     const response = await fetch(`${BASE_URL}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        id,
+        email,
         password,
       }),
     });
@@ -121,10 +121,10 @@ const api = (() => {
     }
 
     const {
-      data: { talks },
+      data: { threads },
     } = responseJson;
 
-    return talks;
+    return threads;
   }
 
   async function getThreadDetail(id) {
@@ -139,10 +139,10 @@ const api = (() => {
     }
 
     const {
-      data: { talkDetail },
+      data: { threadDetail },
     } = responseJson;
 
-    return talkDetail;
+    return threadDetail;
   }
 
   async function createThread({ title, body, category, replyTo = '' }) {
@@ -168,20 +168,20 @@ const api = (() => {
     }
 
     const {
-      data: { talk },
+      data: { thread },
     } = responseJson;
 
-    return talk;
+    return thread;
   }
 
-  async function toggleLikeTalk(id) {
-    const response = await _fetchWithAuth(`${BASE_URL}/talks/likes`, {
+  async function toggleLikeThread(id) {
+    const response = await _fetchWithAuth(`${BASE_URL}/threads/likes`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        talkId: id,
+        threadId: id,
       }),
     });
 
@@ -207,6 +207,7 @@ const api = (() => {
         replyTo,
       }),
     });
+  }
 
   return {
     putAccessToken,
@@ -216,8 +217,8 @@ const api = (() => {
     getOwnProfile,
     getAllUsers,
     getAllThreads,
-    createTalk,
-    toggleLikeTalk,
+    createThread,
+    toggleLikeThread,
     getThreadDetail,
   };
 })();
