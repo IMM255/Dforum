@@ -1,10 +1,12 @@
 import React from 'react';
 import ThreadsItem from './ThreadsItem';
 
-const ThreadsList = () => {
+const ThreadsList = ({ threads, like }) => {
   return (
-    <div className="md:col-span-2">
-      <ThreadsItem />
+    <div className="">
+      {threads.map((thread) => (
+        <ThreadsItem key={thread.id} {...thread} like={like} />
+      ))}
     </div>
   );
 };

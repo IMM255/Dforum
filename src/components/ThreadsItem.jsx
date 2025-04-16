@@ -5,8 +5,12 @@ import {
   FaCommentAlt,
 } from 'react-icons/fa';
 import img from '../assets/imam.jpg';
+import { useNavigate } from 'react-router-dom';
 
-const ThreadsItem = () => {
+const ThreadsItem = ({ id, title, body, category, createdAt, ownerId }) => {
+  {
+    const navigate = useNavigate();
+  }
   return (
     <div className="border py-4 px-8 flex flex-col gap-4">
       <div className="flex gap-4">
@@ -16,9 +20,7 @@ const ThreadsItem = () => {
           alt=""
         />
         <div>
-          <h2 className="text-2xl font-semibold">
-            Bagaimana Cara Menghubungkan API Pada React
-          </h2>
+          <h2 className="text-2xl font-semibold">{title}</h2>
           <h5>Oleh Imam - 3 menit yang lalu</h5>
           <span className="border  px-2 py-1 rounded-sm mt-2 inline-block">
             Coding
