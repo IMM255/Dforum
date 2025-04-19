@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ThreadsList from '../components/ThreadsList';
 import CategoryPopular from '../components/CategoryPopular';
 import UserActive from '../components/UserActive';
@@ -8,6 +8,7 @@ import {
   asyncAddThread,
   asyncToggleLikeThread,
 } from '../states/threads/action';
+import { asyncPopulateUserAndThreads } from '../states/shared/action';
 
 const HomePage = () => {
   const {
@@ -16,9 +17,12 @@ const HomePage = () => {
     authUser,
   } = useSelector((states) => states);
 
+  useEffect(() => {
+    dispatch(asyncPopulateUserAndThreads());
+  });
   const dispatch = useDispatch();
 
-  const onAddThread = (title, body, category) => {
+  const onAddThread = ({ title, body, category }) => {
     dispatch(asyncAddThread({ title, body, category }));
   };
 
@@ -28,8 +32,8 @@ const HomePage = () => {
 
   const threadList = threads.map((thread) => ({
     ...thread,
-    user: users.find((user) => user.id === thread.user),
-    authUser: authUser.id,
+    user: users.find((user) => user.id === thread.ownerId),
+    authUser: authUser.email,
   }));
 
   return (

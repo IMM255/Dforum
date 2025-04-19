@@ -7,13 +7,23 @@ const ThreadsInput = ({ addThread }) => {
 
   function addthread() {
     if (body.trim()) {
-      addThread(title, body, category);
-      setBody('');
+      addThread({ title, body, category });
       setTitle('');
       setCategory('');
+      setBody('');
     }
   }
 
+  function handleTitleChange({ target }) {
+    if (target.value.length <= 100) {
+      setTitle(target.value);
+    }
+  }
+  function handleCategoryChange({ target }) {
+    if (target.value.length <= 50) {
+      setCategory(target.value);
+    }
+  }
   function handleBodyChange({ target }) {
     if (target.value.length <= 320) {
       setBody(target.value);
@@ -28,6 +38,17 @@ const ThreadsInput = ({ addThread }) => {
             type="text"
             placeholder="judul"
             className="border px-2 py-1 rounded-md"
+            value={title}
+            onChange={handleTitleChange}
+            required
+          />
+          <input
+            type="text"
+            placeholder="category"
+            className="border px-2 py-1 rounded-md"
+            value={category}
+            onChange={handleCategoryChange}
+            required
           />
           <textarea
             className="border min-h-24 px-2 py-1"

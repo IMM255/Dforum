@@ -145,7 +145,7 @@ const api = (() => {
     return threadDetail;
   }
 
-  async function createThread({ title, body, category, replyTo = '' }) {
+  async function createThread({ title, body, category }) {
     const response = await _fetchWithAuth(`${BASE_URL}/threads`, {
       method: 'POST',
       headers: {
@@ -155,7 +155,6 @@ const api = (() => {
         title,
         body,
         category,
-        replyTo,
       }),
     });
 

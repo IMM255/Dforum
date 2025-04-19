@@ -1,6 +1,6 @@
 import api from '../../utils/api';
 import { receiveThreadsActionCreator } from '../threads/action';
-import { receiveUserActionCreator } from '../users/action';
+import { receiveUsersActionCreator } from '../users/action';
 
 function asyncPopulateUserAndThreads() {
   return async (dispatch) => {
@@ -8,7 +8,7 @@ function asyncPopulateUserAndThreads() {
       const users = await api.getAllUsers();
       const threads = await api.getAllThreads();
 
-      dispatch(receiveUserActionCreator(users));
+      dispatch(receiveUsersActionCreator(users));
       dispatch(receiveThreadsActionCreator(threads));
     } catch (error) {
       alert(error.message);
