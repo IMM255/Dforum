@@ -16,11 +16,11 @@ const HomePage = () => {
     users = [],
     authUser,
   } = useSelector((states) => states);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(asyncPopulateUserAndThreads());
-  });
-  const dispatch = useDispatch();
+  }, [dispatch]);
 
   const onAddThread = ({ title, body, category }) => {
     dispatch(asyncAddThread({ title, body, category }));

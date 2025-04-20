@@ -20,11 +20,17 @@ const ThreadsItem = ({
   totalComments,
   user,
 }) => {
-  {
-    const navigate = useNavigate();
-  }
+  const navigate = useNavigate();
+  const onThreadClick = () => {
+    navigate(`/thread/${id}`);
+  };
+
   return (
-    <div className="border py-4 px-8 flex flex-col gap-4">
+    <div
+      role="button"
+      onClick={onThreadClick}
+      className="border py-4 px-8 flex flex-col gap-4"
+    >
       <div className="flex gap-4">
         <img
           className="w-[72px] h-[72px] object-cover rounded-full"
