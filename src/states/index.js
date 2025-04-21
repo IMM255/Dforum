@@ -11,7 +11,7 @@ const store = configureStore({
     isPreload: isPreloadReducer,
     users: usersReducer,
     threads: threadsReducer,
-    ThreadDetail: threadDetailReducer,
+    detailThread: threadDetailReducer,
   },
 });
 

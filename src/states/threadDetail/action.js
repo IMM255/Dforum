@@ -7,11 +7,11 @@ const ActionType = {
   TOGGLE_LIKE_THREAD_DETAIL: 'TOGGLE_LIKE_THREAD_DETAIL',
 };
 
-function receiveThreadDetailActionCreator(threadDetail) {
+function receiveThreadDetailActionCreator(detailThread) {
   return {
     type: ActionType.RECEIVE_THREAD_DETAIL,
     payload: {
-      threadDetail,
+      detailThread,
     },
   };
 }
@@ -35,8 +35,8 @@ function asyncReceiveThreadDetail(threadId) {
   return async (dispatch) => {
     dispatch(clearThreadDetailActionCreator());
     try {
-      const threadDetail = await api.getThreadDetail(threadId);
-      dispatch(receiveThreadDetailActionCreator(threadDetail));
+      const detailThread = await api.getThreadDetail(threadId);
+      dispatch(receiveThreadDetailActionCreator(detailThread));
     } catch (error) {
       alert(error.message);
     }
@@ -45,11 +45,11 @@ function asyncReceiveThreadDetail(threadId) {
 
 function asyncToggleLikeThreadDetail() {
   return async (dispatch, getState) => {
-    const { authUser, threadDetail } = getState();
+    const { authUser, detailThread } = getState();
     dispatch(toggleLikeThreadDetailActionCreator(authUser.id));
 
     try {
-      await api.toggleLikeThread(threadDetail.id);
+      await api.toggleLikeThread(detailThread.id);
     } catch (error) {
       alert(error.message);
     }

@@ -5,32 +5,39 @@ import {
   FaCommentAlt,
 } from 'react-icons/fa';
 import img from '../assets/imam.jpg';
+import { postedAt } from '../utils';
 
-const ThreadsDetail = () => {
+const ThreadDetail = ({
+  id,
+  title,
+  body,
+  category,
+  createdAt,
+  owner,
+  upVotesBy,
+  downVotesBy,
+  comments,
+}) => {
   return (
     <div className="md:col-span-2 border pb-10">
       <div className=" py-4 px-8 flex flex-col gap-4">
         <div className="flex gap-4">
           <img
             className="w-[72px] h-[72px] object-cover rounded-full"
-            src={img}
-            alt=""
+            src={owner.avatar}
+            alt={owner}
           />
           <div>
-            <h2 className="text-2xl font-semibold">
-              Bagaimana Cara Menghubungkan API Pada React
-            </h2>
-            <h5>Oleh Imam - 3 menit yang lalu</h5>
+            <h2 className="text-2xl font-semibold">{title}</h2>
+            <h5>
+              Oleh {owner.name} - {postedAt(createdAt)}
+            </h5>
             <span className="border  px-2 py-1 rounded-sm mt-2 inline-block">
-              Coding
+              {category}
             </span>
           </div>
         </div>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat
-          adipisci inventore est, earum magni saepe corporis at rem reiciendis
-          debitis.
-        </p>
+        <p>{body}</p>
         <div className="flex gap-2">
           <div className="up-vote flex items-center gap-1">
             <FaArrowCircleUp className="text-3xl" />
@@ -89,4 +96,4 @@ const ThreadsDetail = () => {
   );
 };
 
-export default ThreadsDetail;
+export default ThreadDetail;
