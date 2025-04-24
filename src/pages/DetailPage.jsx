@@ -4,7 +4,12 @@ import CategoryPopular from '../components/CategoryPopular';
 import UserActive from '../components/UserActive';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { asyncReceiveThreadDetail } from '../states/threadDetail/action';
+import {
+  asyncDownVoteThread,
+  asyncReceiveThreadDetail,
+  asyncUpVoteThread,
+} from '../states/threadDetail/action';
+import { asyncAddComment } from '../states/comment/action';
 
 const DetailPage = () => {
   const { id } = useParams();
@@ -15,15 +20,29 @@ const DetailPage = () => {
     dispatch(asyncReceiveThreadDetail(id));
   }, [id, dispatch]);
 
+  const onUpVoteThread = (id) => {
+    dispatch(asyncUpVoteThread(id));
+  };
+  const onDownVoteThread = (id) => {
+    dispatch(asyncDownVoteThread(id));
+  };
+  const onCommentThread = ({ id, content }) => {
+    dispatch(asyncAddComment({ id, content }));
+  };
+
   if (!detailThread) {
     return null;
   }
   return (
     <section className="grid md:grid-cols-4 mt-10 place-items-center md:place-items-start mx-8 xl:mx-2">
       <CategoryPopular />
-
-      <ThreadDetail {...detailThread} authUser={authUser.id} />
-
+      <ThreadDetail
+        createComment={onCommentThread}
+        {...detailThread}
+        authUser={authUser.id}
+        upVotes={onUpVoteThread}
+        downVotes={onDownVoteThread}
+      />
       <UserActive />
     </section>
   );

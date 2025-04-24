@@ -4,8 +4,9 @@ import {
   FaArrowCircleUp,
   FaCommentAlt,
 } from 'react-icons/fa';
-import img from '../assets/imam.jpg';
+
 import { postedAt } from '../utils';
+import ThreadComment from './ThreadComment';
 
 const ThreadDetail = ({
   id,
@@ -17,7 +18,24 @@ const ThreadDetail = ({
   upVotesBy,
   downVotesBy,
   comments,
+  createComment,
+  authUser,
+  upVotes,
+  downVotes,
 }) => {
+  const isThreadUpVoted = upVotesBy.includes(authUser);
+  const isThreadDownVoted = downVotesBy.includes(authUser);
+  const onUpVoteClick = (event) => {
+    event.stopPropagation();
+    upVotes(id);
+  };
+  const onDownVoteClick = (event) => {
+    event.stopPropagation();
+    downVotes(id);
+  };
+  if (!authUser || !upVotesBy || !downVotesBy) {
+    return <p>Loading...</p>;
+  }
   return (
     <div className="md:col-span-2 border pb-10">
       <div className=" py-4 px-8 flex flex-col gap-4">
@@ -39,15 +57,33 @@ const ThreadDetail = ({
         </div>
         <p>{body}</p>
         <div className="flex gap-2">
-          <div className="up-vote flex items-center gap-1">
-            <FaArrowCircleUp className="text-3xl" />
-            <span>1</span>
-          </div>
-          <div className="down-vote flex items-center gap-1">
-            <FaArrowCircleDown className="text-3xl" />
-            <span>0</span>
-          </div>
-          <div className="comment flex items-center gap-1 ">
+          {upVotes && (
+            <button
+              onClick={onUpVoteClick}
+              className="up-vote flex items-center gap-1"
+            >
+              {isThreadUpVoted ? (
+                <FaArrowCircleUp className="text-3xl text-red-500" />
+              ) : (
+                <FaArrowCircleUp className="text-3xl " />
+              )}
+              <span>{upVotesBy.length}</span>
+            </button>
+          )}
+          {downVotes && (
+            <button
+              onClick={onDownVoteClick}
+              className="down-vote flex items-center gap-1"
+            >
+              {isThreadDownVoted ? (
+                <FaArrowCircleDown className="text-3xl text-red-500" />
+              ) : (
+                <FaArrowCircleDown className="text-3xl " />
+              )}
+              <span>{downVotesBy.length}</span>
+            </button>
+          )}
+          <div className="flex items-center gap-1">
             <FaCommentAlt className="text-3xl" />
             <span>0</span>
           </div>
@@ -56,41 +92,37 @@ const ThreadDetail = ({
       <div>
         <hr />
         <h3 className="ps-8">Komentar</h3>
-        <div className="border-b w-[92%]  mx-auto">
-          <div className=" py-4 px-8 flex flex-col gap-4">
-            <div className="flex gap-4">
-              <img
-                className="w-[48px] h-[48px] object-cover rounded-full"
-                src={img}
-                alt=""
-              />
-              <div>
-                <h4>Imam</h4>
-                <h5 className="text-sm">4 menit yang lalu</h5>
+        {comments.map((comment) => {
+          return (
+            <div className="border-b w-[92%]  mx-auto">
+              <div className=" py-4 px-8 flex flex-col gap-4">
+                <div className="flex gap-4">
+                  <img
+                    className="w-[48px] h-[48px] object-cover rounded-full"
+                    src={comment.owner.avatar}
+                    alt=""
+                  />
+                  <div>
+                    <h4>{comment.owner.name}</h4>
+                    <h5 className="text-sm">{postedAt(createdAt)}</h5>
+                  </div>
+                </div>
+                <p className="text-md">{comment.content}</p>
+                <div className="flex gap-2">
+                  <div className="up-vote flex items-center gap-1">
+                    <FaArrowCircleUp className="text-xl" />
+                    <span>1</span>
+                  </div>
+                  <div className="down-vote flex items-center gap-1">
+                    <FaArrowCircleDown className="text-xl" />
+                    <span>0</span>
+                  </div>
+                </div>
               </div>
             </div>
-            <p className="text-md">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat
-              adipisci inventore est, earum magni saepe corporis at rem
-              reiciendis debitis.
-            </p>
-            <div className="flex gap-2">
-              <div className="up-vote flex items-center gap-1">
-                <FaArrowCircleUp className="text-xl" />
-                <span>1</span>
-              </div>
-              <div className="down-vote flex items-center gap-1">
-                <FaArrowCircleDown className="text-xl" />
-                <span>0</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="px-8">
-          <h3>Tambahkan Komentar</h3>
-          <textarea className="w-full h-22 border" name="" id=""></textarea>
-          <button className="border px-2 py-1 w-full">Kirim</button>
-        </div>
+          );
+        })}
+        <ThreadComment createComment={createComment} />;
       </div>
     </div>
   );

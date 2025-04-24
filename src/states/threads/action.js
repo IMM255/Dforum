@@ -3,7 +3,8 @@ import api from '../../utils/api';
 const ActionType = {
   RECEIVE_THREADS: 'RECEIVE_THREADS',
   ADD_THREAD: 'ADD_THREADS',
-  TOGGLE_LIKE_THREAD: 'TOGGLE_LIKE_THREAD',
+  TOGGLE_UP_VOTE_THREAD: 'TOGGLE_UP_VOTE_THREAD',
+  TOGGLE_DOWN_VOTE_THREAD: 'TOGGLE_DOWN_VOTE_THREAD',
 };
 
 function receiveThreadsActionCreator(threads) {
@@ -24,9 +25,19 @@ function addThreadCreator(thread) {
   };
 }
 
-function toggleLikeThreadActionCreator({ threadId, userId }) {
+function upVoteThreadCreator({ threadId, userId }) {
   return {
-    type: ActionType.TOGGLE_LIKE_THREAD,
+    type: ActionType.TOGGLE_UP_VOTE_THREAD,
+    payload: {
+      threadId,
+      userId,
+    },
+  };
+}
+
+function downVoteThreadCreator({ threadId, userId }) {
+  return {
+    type: ActionType.TOGGLE_DOWN_VOTE_THREAD,
     payload: {
       threadId,
       userId,
@@ -45,16 +56,28 @@ function asyncAddThread({ title, body, category }) {
   };
 }
 
-function asyncToggleLikeThread(threadId) {
+function asyncUpVoteThread(threadId) {
   return async (dispatch, getState) => {
     const { authUser } = getState();
-    dispatch(toggleLikeThreadActionCreator({ threadId, userId: authUser.id }));
-
+    dispatch(upVoteThreadCreator({ threadId, userId: authUser.id }));
     try {
-      await api.toggleLikeThread(threadId);
+      await api.upVoteThread(threadId);
     } catch (error) {
       alert(error.message);
-      dispatch(toggleLikeThreadActionCreator);
+      dispatch(upVoteThreadCreator({ threadId, userId: authUser.id }));
+    }
+  };
+}
+
+function asyncDownVoteThread(threadId) {
+  return async (dispatch, getState) => {
+    const { authUser } = getState();
+    dispatch(downVoteThreadCreator({ threadId, userId: authUser.id }));
+    try {
+      await api.downVoteThread(threadId);
+    } catch (error) {
+      alert(error.message);
+      dispatch(downVoteThreadCreator({ threadId, userId: authUser.id }));
     }
   };
 }
@@ -63,7 +86,8 @@ export {
   ActionType,
   receiveThreadsActionCreator,
   addThreadCreator,
-  toggleLikeThreadActionCreator,
+  upVoteThreadCreator,
   asyncAddThread,
-  asyncToggleLikeThread,
+  asyncUpVoteThread,
+  asyncDownVoteThread,
 };

@@ -6,16 +6,39 @@ function threadsReducer(threads = [], action = {}) {
       return action.payload.threads;
     case ActionType.ADD_THREAD:
       return [action.payload.thread, ...threads];
-    case ActionType.TOGGLE_LIKE_THREAD:
+    case ActionType.TOGGLE_UP_VOTE_THREAD:
       return threads.map((thread) => {
         if (thread.id === action.payload.threadId) {
+          const hasUpvoted = thread.upVotesBy.includes(action.payload.userId);
           return {
             ...thread,
-            likes: thread.likes.includes(action.payload.userId)
-              ? thread.likes.filter((id) => id !== action.payload.userId)
-              : thread.likes.concat([action.payload.userId]),
+            upVotesBy: hasUpvoted
+              ? thread.upVotesBy.filter((id) => id !== action.payload.userId)
+              : [...thread.upVotesBy, action.payload.userId],
+            downVotesBy: thread.downVotesBy.filter(
+              (id) => id !== action.payload.userId
+            ),
           };
         }
+        return thread;
+      });
+    case ActionType.TOGGLE_DOWN_VOTE_THREAD:
+      return threads.map((thread) => {
+        if (thread.id === action.payload.threadId) {
+          const hasDownvoted = thread.downVotesBy.includes(
+            action.payload.userId
+          );
+          return {
+            ...thread,
+            downVotesBy: hasDownvoted
+              ? thread.downVotesBy.filter((id) => id !== action.payload.userId)
+              : [...thread.downVotesBy, action.payload.userId],
+            upVotesBy: thread.upVotesBy.filter(
+              (id) => id !== action.payload.userId
+            ),
+          };
+        }
+        return thread;
       });
     default:
       return threads;

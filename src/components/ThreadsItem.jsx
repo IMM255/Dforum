@@ -19,12 +19,25 @@ const ThreadsItem = ({
   downVotesBy,
   totalComments,
   user,
+  upVotes,
+  downVotes,
+  authUser,
 }) => {
   const navigate = useNavigate();
+  const isThreadUpVoted = upVotesBy.includes(authUser);
+  const isThreadDownVoted = downVotesBy.includes(authUser);
   const onThreadClick = () => {
     navigate(`/thread/${id}`);
   };
 
+  const onUpVoteClick = (event) => {
+    event.stopPropagation();
+    upVotes(id);
+  };
+  const onDownVoteClick = (event) => {
+    event.stopPropagation();
+    downVotes(id);
+  };
   return (
     <div
       role="button"
@@ -49,14 +62,35 @@ const ThreadsItem = ({
       </div>
       <p>{body.replace(/<[^>]*>?/gm, '')}</p>
       <div className="flex gap-2">
-        <div className="up-vote flex items-center gap-1">
-          <FaArrowCircleUp className="text-3xl" />
-          <span>1</span>
-        </div>
-        <div className="down-vote flex items-center gap-1">
-          <FaArrowCircleDown className="text-3xl" />
-          <span>0</span>
-        </div>
+        {upVotes && (
+          <button
+            className="up-vote flex items-center gap-1"
+            onClick={onUpVoteClick}
+          >
+            {isThreadUpVoted ? (
+              <FaArrowCircleUp className="text-3xl text-red-500" />
+            ) : (
+              <FaArrowCircleUp className="text-3xl " />
+            )}
+
+            <span>{upVotesBy.length}</span>
+          </button>
+        )}
+        {upVotes && (
+          <button
+            className="up-vote flex items-center gap-1"
+            onClick={onDownVoteClick}
+          >
+            {isThreadDownVoted ? (
+              <FaArrowCircleDown className="text-3xl text-red-500" />
+            ) : (
+              <FaArrowCircleDown className="text-3xl" />
+            )}
+
+            <span>{downVotesBy.length}</span>
+          </button>
+        )}
+
         <div className="comment flex items-center gap-1 ">
           <FaCommentAlt className="text-3xl" />
           <span>{totalComments}</span>

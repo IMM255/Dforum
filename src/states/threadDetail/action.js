@@ -5,6 +5,8 @@ const ActionType = {
   RECEIVE_THREAD_DETAIL: 'RECEIVE_THREAD_DETAIL',
   CLEAR_THREAD_DETAIL: 'CLEAR_THREAD_DETAIL',
   TOGGLE_LIKE_THREAD_DETAIL: 'TOGGLE_LIKE_THREAD_DETAIL',
+  TOGGLE_UP_VOTE_THREAD: 'TOGGLE_UP_VOTE_THREAD',
+  TOGGLE_DOWN_VOTE_THREAD: 'TOGGLE_DOWN_VOTE_THREAD',
 };
 
 function receiveThreadDetailActionCreator(detailThread) {
@@ -43,6 +45,25 @@ function asyncReceiveThreadDetail(threadId) {
   };
 }
 
+function upVoteThreadCreator({ threadId, userId }) {
+  return {
+    type: ActionType.TOGGLE_UP_VOTE_THREAD,
+    payload: {
+      threadId,
+      userId,
+    },
+  };
+}
+
+function downVoteThreadCreator({ threadId, userId }) {
+  return {
+    type: ActionType.TOGGLE_DOWN_VOTE_THREAD,
+    payload: {
+      threadId,
+      userId,
+    },
+  };
+}
 function asyncToggleLikeThreadDetail() {
   return async (dispatch, getState) => {
     const { authUser, detailThread } = getState();
@@ -56,11 +77,41 @@ function asyncToggleLikeThreadDetail() {
   };
 }
 
+function asyncUpVoteThread(threadId) {
+  return async (dispatch, getState) => {
+    const { authUser } = getState();
+    dispatch(upVoteThreadCreator({ threadId, userId: authUser.id }));
+    try {
+      await api.upVoteThread(threadId);
+    } catch (error) {
+      alert(error.message);
+      dispatch(upVoteThreadCreator({ threadId, userId: authUser.id }));
+    }
+  };
+}
+
+function asyncDownVoteThread(threadId) {
+  return async (dispatch, getState) => {
+    const { authUser } = getState();
+    dispatch(downVoteThreadCreator({ threadId, userId: authUser.id }));
+    try {
+      await api.downVoteThread(threadId);
+    } catch (error) {
+      alert(error.message);
+      dispatch(downVoteThreadCreator({ threadId, userId: authUser.id }));
+    }
+  };
+}
+
 export {
   ActionType,
   receiveThreadDetailActionCreator,
   clearThreadDetailActionCreator,
   toggleLikeThreadDetailActionCreator,
+  upVoteThreadCreator,
+  downVoteThreadCreator,
   asyncReceiveThreadDetail,
   asyncToggleLikeThreadDetail,
+  asyncDownVoteThread,
+  asyncUpVoteThread,
 };
