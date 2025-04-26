@@ -22,17 +22,41 @@ const ThreadDetail = ({
   authUser,
   upVotes,
   downVotes,
+  upVoteComment,
+  downVoteComment,
+  neutralVotes,
 }) => {
   const isThreadUpVoted = upVotesBy.includes(authUser);
   const isThreadDownVoted = downVotesBy.includes(authUser);
+
   const onUpVoteClick = (event) => {
     event.stopPropagation();
-    upVotes(id);
+    if (isThreadUpVoted) {
+      neutralVotes(id);
+    } else {
+      upVotes(id);
+    }
   };
+
   const onDownVoteClick = (event) => {
     event.stopPropagation();
-    downVotes(id);
+    if (isThreadDownVoted) {
+      neutralVotes(id);
+    } else {
+      downVotes(id);
+    }
   };
+
+  const onUpVoteCommentClick = ({ event, commentId }) => {
+    event.stopPropagation();
+    upVoteComment({ commentId, userId: authUser, threadId: id });
+  };
+
+  const onDownVoteCommentClick = ({ event, commentId }) => {
+    event.stopPropagation();
+    downVoteComment({ commentId, userId: authUser, threadId: id });
+  };
+
   if (!authUser || !upVotesBy || !downVotesBy) {
     return <p>Loading...</p>;
   }
@@ -85,7 +109,7 @@ const ThreadDetail = ({
           )}
           <div className="flex items-center gap-1">
             <FaCommentAlt className="text-3xl" />
-            <span>0</span>
+            <span>{comments.length}</span>
           </div>
         </div>
       </div>
@@ -93,6 +117,8 @@ const ThreadDetail = ({
         <hr />
         <h3 className="ps-8">Komentar</h3>
         {comments.map((comment) => {
+          const isCommentUpVoted = comment.upVotesBy.includes(authUser);
+          const isCommentDownVoted = comment.downVotesBy.includes(authUser);
           return (
             <div className="border-b w-[92%]  mx-auto">
               <div className=" py-4 px-8 flex flex-col gap-4">
@@ -107,16 +133,41 @@ const ThreadDetail = ({
                     <h5 className="text-sm">{postedAt(createdAt)}</h5>
                   </div>
                 </div>
-                <p className="text-md">{comment.content}</p>
+                <p className="text-md">
+                  {comment.content}
+                  {comment.id}
+                </p>
                 <div className="flex gap-2">
-                  <div className="up-vote flex items-center gap-1">
-                    <FaArrowCircleUp className="text-xl" />
-                    <span>1</span>
-                  </div>
-                  <div className="down-vote flex items-center gap-1">
-                    <FaArrowCircleDown className="text-xl" />
-                    <span>0</span>
-                  </div>
+                  <button
+                    onClick={(e) =>
+                      onUpVoteCommentClick({ event: e, commentId: comment.id })
+                    }
+                    className="up-vote flex items-center gap-1"
+                  >
+                    {isCommentUpVoted ? (
+                      <FaArrowCircleUp className="text-xl text-red-500" />
+                    ) : (
+                      <FaArrowCircleUp className="text-xl" />
+                    )}
+
+                    <span>{comment.upVotesBy.length}</span>
+                  </button>
+                  <button
+                    onClick={(e) =>
+                      onDownVoteCommentClick({
+                        event: e,
+                        commentId: comment.id,
+                      })
+                    }
+                    className="down-vote flex items-center gap-1"
+                  >
+                    {isCommentDownVoted ? (
+                      <FaArrowCircleDown className="text-xl text-red-500" />
+                    ) : (
+                      <FaArrowCircleDown className="text-xl" />
+                    )}
+                    <span>{comment.downVotesBy.length}</span>
+                  </button>
                 </div>
               </div>
             </div>

@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   asyncAddThread,
   asyncDownVoteThread,
+  asyncNeutralizeVoteThread,
   asyncUpVoteThread,
 } from '../states/threads/action';
 import { asyncPopulateUserAndThreads } from '../states/shared/action';
@@ -34,6 +35,10 @@ const HomePage = () => {
     dispatch(asyncDownVoteThread(id));
   };
 
+  const onNeutralVoteThread = (id) => {
+    dispatch(asyncNeutralizeVoteThread(id));
+  };
+
   const threadList = threads.map((thread) => ({
     ...thread,
     user: users.find((user) => user.id === thread.ownerId),
@@ -49,6 +54,7 @@ const HomePage = () => {
           threads={threadList}
           upVotes={onUpVoteThread}
           downVotes={onDownVoteThread}
+          neutralVotes={onNeutralVoteThread}
         />
       </div>
       <UserActive />

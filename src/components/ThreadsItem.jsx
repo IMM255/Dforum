@@ -21,23 +21,32 @@ const ThreadsItem = ({
   user,
   upVotes,
   downVotes,
+  neutralVotes,
   authUser,
 }) => {
   const navigate = useNavigate();
-  const isThreadUpVoted = upVotesBy.includes(authUser);
-  const isThreadDownVoted = downVotesBy.includes(authUser);
   const onThreadClick = () => {
     navigate(`/thread/${id}`);
   };
 
   const onUpVoteClick = (event) => {
     event.stopPropagation();
-    upVotes(id);
+    if (upVotesBy.includes(authUser)) {
+      neutralVotes(id);
+    } else {
+      upVotes(id);
+    }
   };
+
   const onDownVoteClick = (event) => {
     event.stopPropagation();
-    downVotes(id);
+    if (downVotesBy.includes(authUser)) {
+      neutralVotes(id);
+    } else {
+      downVotes(id);
+    }
   };
+
   return (
     <div
       role="button"
@@ -67,7 +76,7 @@ const ThreadsItem = ({
             className="up-vote flex items-center gap-1"
             onClick={onUpVoteClick}
           >
-            {isThreadUpVoted ? (
+            {upVotesBy.includes(authUser) ? (
               <FaArrowCircleUp className="text-3xl text-red-500" />
             ) : (
               <FaArrowCircleUp className="text-3xl " />
@@ -76,12 +85,12 @@ const ThreadsItem = ({
             <span>{upVotesBy.length}</span>
           </button>
         )}
-        {upVotes && (
+        {downVotes && (
           <button
             className="up-vote flex items-center gap-1"
             onClick={onDownVoteClick}
           >
-            {isThreadDownVoted ? (
+            {downVotesBy.includes(authUser) ? (
               <FaArrowCircleDown className="text-3xl text-red-500" />
             ) : (
               <FaArrowCircleDown className="text-3xl" />

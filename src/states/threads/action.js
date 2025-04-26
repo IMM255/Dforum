@@ -5,6 +5,7 @@ const ActionType = {
   ADD_THREAD: 'ADD_THREADS',
   TOGGLE_UP_VOTE_THREAD: 'TOGGLE_UP_VOTE_THREAD',
   TOGGLE_DOWN_VOTE_THREAD: 'TOGGLE_DOWN_VOTE_THREAD',
+  TOGGLE_NEUTRALIZE_VOTE_THREAD: 'TOGGLE_NEUTRALIZE_VOTE_THREAD',
 };
 
 function receiveThreadsActionCreator(threads) {
@@ -38,6 +39,16 @@ function upVoteThreadCreator({ threadId, userId }) {
 function downVoteThreadCreator({ threadId, userId }) {
   return {
     type: ActionType.TOGGLE_DOWN_VOTE_THREAD,
+    payload: {
+      threadId,
+      userId,
+    },
+  };
+}
+
+function neutralizeVoteThreadCreator({ threadId, userId }) {
+  return {
+    type: ActionType.TOGGLE_NEUTRALIZE_VOTE_THREAD,
     payload: {
       threadId,
       userId,
@@ -82,12 +93,28 @@ function asyncDownVoteThread(threadId) {
   };
 }
 
+function asyncNeutralizeVoteThread(threadId) {
+  return async (dispatch, getState) => {
+    const { authUser } = getState();
+    dispatch(neutralizeVoteThreadCreator({ threadId, userId: authUser.id }));
+    try {
+      await api.neutralizeVoteThread(threadId);
+    } catch (error) {
+      alert(error.message);
+      dispatch(neutralizeVoteThreadCreator({ threadId, userId: authUser.id }));
+    }
+  };
+}
+
 export {
   ActionType,
   receiveThreadsActionCreator,
   addThreadCreator,
   upVoteThreadCreator,
+  neutralizeVoteThreadCreator,
+  downVoteThreadCreator,
   asyncAddThread,
   asyncUpVoteThread,
   asyncDownVoteThread,
+  asyncNeutralizeVoteThread,
 };

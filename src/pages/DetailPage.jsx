@@ -5,11 +5,14 @@ import UserActive from '../components/UserActive';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  asyncDownVoteThread,
+  asyncAddComment,
+  asyncDownVoteComment,
+  asyncDownVoteThreadDetail,
+  asyncNeutralizeVoteThreadDetail,
   asyncReceiveThreadDetail,
-  asyncUpVoteThread,
+  asyncUpVoteComment,
+  asyncUpVoteThreadDetail,
 } from '../states/threadDetail/action';
-import { asyncAddComment } from '../states/comment/action';
 
 const DetailPage = () => {
   const { id } = useParams();
@@ -21,11 +24,22 @@ const DetailPage = () => {
   }, [id, dispatch]);
 
   const onUpVoteThread = (id) => {
-    dispatch(asyncUpVoteThread(id));
+    dispatch(asyncUpVoteThreadDetail(id));
+  };
+  const onNeutralizeVoteThread = (id) => {
+    dispatch(asyncNeutralizeVoteThreadDetail(id));
   };
   const onDownVoteThread = (id) => {
-    dispatch(asyncDownVoteThread(id));
+    dispatch(asyncDownVoteThreadDetail(id));
   };
+  const onUpVoteComment = ({ threadId, commentId }) => {
+    dispatch(asyncUpVoteComment({ threadId, commentId }));
+  };
+
+  const onDownVoteComment = ({ threadId, commentId }) => {
+    dispatch(asyncDownVoteComment({ threadId, commentId }));
+  };
+
   const onCommentThread = ({ id, content }) => {
     dispatch(asyncAddComment({ id, content }));
   };
@@ -42,6 +56,9 @@ const DetailPage = () => {
         authUser={authUser.id}
         upVotes={onUpVoteThread}
         downVotes={onDownVoteThread}
+        upVoteComment={onUpVoteComment}
+        downVoteComment={onDownVoteComment}
+        neutralVotes={onNeutralizeVoteThread}
       />
       <UserActive />
     </section>
