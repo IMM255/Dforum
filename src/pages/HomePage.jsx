@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ThreadsList from '../components/ThreadsList';
 import CategoryPopular from '../components/CategoryPopular';
 import UserActive from '../components/UserActive';
@@ -19,6 +19,7 @@ const HomePage = () => {
     authUser,
   } = useSelector((states) => states);
   const dispatch = useDispatch();
+
 
   useEffect(() => {
     dispatch(asyncPopulateUserAndThreads());
@@ -45,8 +46,9 @@ const HomePage = () => {
     authUser: authUser.id,
   }));
 
+
   return (
-    <section className="grid md:grid-cols-4 mt-10 place-items-center mx-8 xl:mx-2">
+    <section className="grid md:grid-cols-4 mt-10 place-items-center md:place-items-start mx-8 xl:mx-2">
       <CategoryPopular />
       <div className="md:col-span-2 w-full">
         <ThreadsInput addThread={onAddThread} />
