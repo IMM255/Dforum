@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import img from '../assets/imam.jpg';
 import { useDispatch, useSelector } from 'react-redux';
 import { asyncReceiveLeaderboards } from '../states/leaderboards/action';
 

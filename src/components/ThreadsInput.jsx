@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 const ThreadsInput = ({ addThread }) => {
   const [title, setTitle] = useState('');
@@ -67,5 +68,7 @@ const ThreadsInput = ({ addThread }) => {
     </section>
   );
 };
-
+ThreadsInput.propTypes = {
+  addThread: PropTypes.func.isRequired
+};
 export default ThreadsInput;

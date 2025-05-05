@@ -1,5 +1,6 @@
 import React from 'react';
 import useInput from '../hooks/useInput';
+import PropTypes from 'prop-types';
 
 const LoginInput = ({ login }) => {
   const [email, onEmailChange] = useInput('');
@@ -47,4 +48,7 @@ const LoginInput = ({ login }) => {
   );
 };
 
+LoginInput.propTypes = {
+  login: PropTypes.func.isRequired,
+};
 export default LoginInput;

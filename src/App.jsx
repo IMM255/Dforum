@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { asyncPreloadProcess } from './states/isPreload/action';
 import { asyncUnsetAuthUser } from './states/authUser/action';
+import React from 'react';
 
 function App() {
   const { authUser = null, isPreload = false } = useSelector(
@@ -49,7 +50,7 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/thread/:id" element={<DetailPage />} />
+          <Route path="/thread/:threadId" element={<DetailPage />} />
         </Routes>
       </main>
     </>

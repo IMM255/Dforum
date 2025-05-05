@@ -1,4 +1,3 @@
-import { DiSnapSvg } from 'react-icons/di';
 import api from '../../utils/api';
 
 const ActionType = {
@@ -79,10 +78,11 @@ function addCommentActionCreator(comment) {
   };
 }
 
-function asyncAddComment({ id, content }) {
-  return async (dispatch) => {
+function asyncAddComment({ content }) {
+  return async (dispatch, getState) => {
+    const { detailThread } = getState();
     try {
-      const comment = await api.createComment({ id, content });
+      const comment = await api.createComment({ content, threadId: detailThread.id });
       dispatch(addCommentActionCreator(comment));
     } catch (error) {
       alert(error.message);

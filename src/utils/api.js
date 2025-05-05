@@ -127,8 +127,8 @@ const api = (() => {
     return threads;
   }
 
-  async function getThreadDetail(id) {
-    const response = await fetch(`${BASE_URL}/threads/${id}`);
+  async function getThreadDetail(threadId) {
+    const response = await fetch(`${BASE_URL}/threads/${threadId}`);
 
     const responseJson = await response.json();
 
@@ -193,9 +193,9 @@ const api = (() => {
     }
   }
 
-  async function createComment({ id, content }) {
+  async function createComment({ content, threadId }) {
     const response = await _fetchWithAuth(
-      `${BASE_URL}/threads/${id}/comments`,
+      `${BASE_URL}/threads/${threadId}/comments`,
       {
         method: 'POST',
         headers: {
@@ -206,12 +206,16 @@ const api = (() => {
         }),
       }
     );
-
     const responseJson = await response.json();
     const { status, message } = responseJson;
     if (status !== 'success') {
       throw new Error(message);
     }
+    const {
+      data: { comment },
+    } = responseJson;
+
+    return comment;
   }
 
   async function upVoteThread(threadId) {

@@ -4,7 +4,7 @@ import {
   FaArrowCircleUp,
   FaCommentAlt,
 } from 'react-icons/fa';
-import img from '../assets/imam.jpg';
+import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { postedAt } from '../utils';
 
@@ -14,7 +14,6 @@ const ThreadsItem = ({
   body,
   category,
   createdAt,
-  ownerId,
   upVotesBy,
   downVotesBy,
   totalComments,
@@ -108,5 +107,23 @@ const ThreadsItem = ({
     </div>
   );
 };
-
+ThreadsItem.propTypes = {
+  id: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  body: PropTypes.string.isRequired,
+  category: PropTypes.string.isRequired,
+  createdAt: PropTypes.string.isRequired,
+  ownerId: PropTypes.string.isRequired,
+  upVotesBy: PropTypes.arrayOf(PropTypes.string).isRequired,
+  downVotesBy: PropTypes.arrayOf(PropTypes.string).isRequired,
+  totalComments: PropTypes.number.isRequired,
+  user: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    avatar: PropTypes.string.isRequired,
+  }).isRequired,
+  upVotes: PropTypes.func,
+  downVotes: PropTypes.func,
+  neutralVotes: PropTypes.func.isRequired,
+  authUser: PropTypes.string.isRequired,
+};
 export default ThreadsItem;

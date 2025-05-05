@@ -1,12 +1,14 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 const Navbar = ({ authUser, signOut }) => {
   return (
     <header className="bg-black w-full h-16 flex items-center">
       <nav className="text-white px-8 items-center flex justify-between w-full">
         <div className="flex gap-4">
-          <h1 className="text-4xl font-semibold ">D-FORUM</h1>
-          <input className="bg-white rounded-md" type="text" />
+          <Link to="/">
+            <h1 className="text-4xl font-semibold ">D-FORUM</h1>
+          </Link>
         </div>
         {authUser ? (
           <button type="button" onClick={signOut}>
@@ -18,6 +20,11 @@ const Navbar = ({ authUser, signOut }) => {
       </nav>
     </header>
   );
+};
+
+Navbar.propTypes = {
+  authUser: PropTypes.string.isRequired,
+  signOut: PropTypes.func.isRequired,
 };
 
 export default Navbar;

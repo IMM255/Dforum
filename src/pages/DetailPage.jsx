@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
 import ThreadDetail from '../components/ThreadDetail';
-import CategoryPopular from '../components/CategoryPopular';
-import UserActive from '../components/UserActive';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -13,15 +11,18 @@ import {
   asyncUpVoteComment,
   asyncUpVoteThreadDetail,
 } from '../states/threadDetail/action';
+import CommentList from '../components/CommentList';
+import ThreadComment from '../components/ThreadComment';
 
 const DetailPage = () => {
-  const { id } = useParams();
+  const { threadId } = useParams();
   const { detailThread = null, authUser } = useSelector((states) => states);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(asyncReceiveThreadDetail(id));
-  }, [id, dispatch]);
+    dispatch(asyncReceiveThreadDetail(threadId));
+  }, [threadId, dispatch]);
+  console.log('id', threadId);
 
   const onUpVoteThread = (id) => {
     dispatch(asyncUpVoteThreadDetail(id));
@@ -40,27 +41,29 @@ const DetailPage = () => {
     dispatch(asyncDownVoteComment({ threadId, commentId }));
   };
 
-  const onCommentThread = ({ id, content }) => {
-    dispatch(asyncAddComment({ id, content }));
+  const onCommentThread = (content) => {
+    dispatch(asyncAddComment({ content }));
   };
 
   if (!detailThread) {
     return null;
   }
   return (
-    <section className="grid md:grid-cols-4 mt-10 place-items-center md:place-items-start mx-8 xl:mx-2">
-      <CategoryPopular />
-      <ThreadDetail
-        createComment={onCommentThread}
-        {...detailThread}
-        authUser={authUser.id}
-        upVotes={onUpVoteThread}
-        downVotes={onDownVoteThread}
-        upVoteComment={onUpVoteComment}
-        downVoteComment={onDownVoteComment}
-        neutralVotes={onNeutralizeVoteThread}
-      />
-      <UserActive />
+    <section className="grid mt-10 place-items-center mx-8 xl:mx-2">
+      <div className='border pb-10 md:w-[700px] '>
+        <ThreadDetail
+          {...detailThread}
+          authUser={authUser.id}
+          upVotes={onUpVoteThread}
+          downVotes={onDownVoteThread}
+          upVoteComment={onUpVoteComment}
+          downVoteComment={onDownVoteComment}
+          neutralVotes={onNeutralizeVoteThread}
+        />
+        <ThreadComment  createComment={onCommentThread} />;
+        <CommentList threadId={detailThread.id} comments={detailThread.comments} authUser={authUser.id}  upVoteComment={onUpVoteComment} downVoteComment={onDownVoteComment}
+        />
+      </div>
     </section>
   );
 };

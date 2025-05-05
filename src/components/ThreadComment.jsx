@@ -1,17 +1,12 @@
 import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const ThreadComment = ({ createComment }) => {
   const [content, setContent] = useState('');
-  const { id } = useParams();
-  const navigate = useNavigate('/');
 
   function commentHandler() {
-    if (content.trim()) {
-      createComment({ id, content });
-      setContent('');
-      navigate('/');
-    }
+    createComment(content);
+    setContent('');
   }
 
   function handleTextChange({ target }) {
@@ -38,6 +33,10 @@ const ThreadComment = ({ createComment }) => {
       </button>
     </div>
   );
+};
+
+ThreadComment.propTypes = {
+  createComment: PropTypes.func.isRequired
 };
 
 export default ThreadComment;

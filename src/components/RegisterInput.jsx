@@ -1,5 +1,6 @@
 import React from 'react';
 import useInput from '../hooks/useInput';
+import PropTypes from 'prop-types';
 
 const RegisterInput = ({ register }) => {
   const [name, onNameChange] = useInput('');
@@ -58,6 +59,10 @@ const RegisterInput = ({ register }) => {
       </span>
     </div>
   );
+};
+
+RegisterInput.propTypes ={
+  register: PropTypes.func.isRequired
 };
 
 export default RegisterInput;

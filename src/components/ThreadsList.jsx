@@ -1,9 +1,9 @@
 import React from 'react';
 import ThreadsItem from './ThreadsItem';
-
+import PropTypes from 'prop-types';
 const ThreadsList = ({ threads, upVotes, downVotes, neutralVotes }) => {
   return (
-    <div className="">
+    <div className="flex gap-4 flex-col">
       {threads.map((thread) => (
         <ThreadsItem
           key={thread.id}
@@ -16,5 +16,10 @@ const ThreadsList = ({ threads, upVotes, downVotes, neutralVotes }) => {
     </div>
   );
 };
-
+ThreadsList.propTypes = {
+  threads: PropTypes.array.isRequired,
+  upVotes: PropTypes.func,
+  downVotes: PropTypes.func,
+  neutralVotes: PropTypes.func.isRequired,
+};
 export default ThreadsList;

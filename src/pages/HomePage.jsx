@@ -20,6 +20,7 @@ const HomePage = () => {
   } = useSelector((states) => states);
   const dispatch = useDispatch();
 
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
     dispatch(asyncPopulateUserAndThreads());
@@ -40,16 +41,25 @@ const HomePage = () => {
     dispatch(asyncNeutralizeVoteThread(id));
   };
 
-  const threadList = threads.map((thread) => ({
+  const categories = [...new Set(threads.map((t) => t.category))];
+
+  const filteredThreads = selectedCategory
+    ? threads.filter((t) => t.category === selectedCategory)
+    : threads;
+
+  const threadList = filteredThreads.map((thread) => ({
     ...thread,
     user: users.find((user) => user.id === thread.ownerId),
     authUser: authUser.id,
   }));
 
-
   return (
-    <section className="grid md:grid-cols-4 mt-10 place-items-center md:place-items-start mx-8 xl:mx-2">
-      <CategoryPopular />
+    <section className="min-h-screen grid md:grid-cols-4 mt-10 place-items-center md:place-items-start mx-8 xl:mx-2">
+      <CategoryPopular
+        categories={categories}
+        onCategoryClick={setSelectedCategory}
+        activeCategory={selectedCategory}
+      />
       <div className="md:col-span-2 w-full">
         <ThreadsInput addThread={onAddThread} />
         <ThreadsList
