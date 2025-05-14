@@ -10,6 +10,10 @@ const Navbar = ({ authUser, signOut }) => {
             <h1 className="text-4xl font-semibold ">D-FORUM</h1>
           </Link>
         </div>
+        <div className='flex gap-5'>
+          <Link to='/' >Home</Link>
+          <Link to='/leaderboard'>Leaderboard</Link>
+        </div>
         {authUser ? (
           <button type="button" onClick={signOut}>
             Sign Out

@@ -4,13 +4,17 @@ import Navbar from './components/Navbar';
 import DetailPage from './pages/DetailPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { asyncPreloadProcess } from './states/isPreload/action';
 import { asyncUnsetAuthUser } from './states/authUser/action';
+import LoadingBar from 'react-top-loading-bar';
 import React from 'react';
+import LeaderBoard from './pages/LeaderBoard';
 
 function App() {
+  const loadingBarRef = useRef(null);
+  const isLoading = useSelector((state) => state.isLoading);
   const { authUser = null, isPreload = false } = useSelector(
     (states) => states
   );
@@ -21,6 +25,15 @@ function App() {
     dispatch(asyncPreloadProcess());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (!loadingBarRef.current) return;
+    if (isLoading) {
+      loadingBarRef.current.continuousStart();
+    } else {
+      loadingBarRef.current.complete();
+    }
+  }, [isLoading]);
+
   const onSignOut = () => {
     dispatch(asyncUnsetAuthUser());
   };
@@ -28,12 +41,13 @@ function App() {
   if (isPreload) {
     return null;
   }
-  console.log(authUser);
+
   if (authUser === null) {
     return (
       <>
         <Navbar authUser={authUser} signOut={onSignOut} />
         <main>
+          <LoadingBar color="#f11946" ref={loadingBarRef} />
           <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route path="/login" element={<LoginPage />} />
@@ -48,9 +62,11 @@ function App() {
     <>
       <Navbar authUser={authUser} signOut={onSignOut} />
       <main>
+        <LoadingBar color="#f11946" ref={loadingBarRef} />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/thread/:threadId" element={<DetailPage />} />
+          <Route path="/leaderBoard" element={<LeaderBoard />} />
         </Routes>
       </main>
     </>

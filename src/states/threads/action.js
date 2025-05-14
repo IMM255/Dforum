@@ -1,4 +1,8 @@
 import api from '../../utils/api';
+import {
+  startLoadingActionCreator,
+  stopLoadingActionCreator,
+} from '../isLoading/action';
 
 const ActionType = {
   RECEIVE_THREADS: 'RECEIVE_THREADS',
@@ -58,11 +62,14 @@ function neutralizeVoteThreadCreator({ threadId, userId }) {
 
 function asyncAddThread({ title, body, category }) {
   return async (dispatch) => {
+    dispatch(startLoadingActionCreator());
     try {
       const thread = await api.createThread({ title, body, category });
       dispatch(addThreadCreator(thread));
     } catch (error) {
       alert(error.message);
+    } finally {
+      dispatch(stopLoadingActionCreator());
     }
   };
 }

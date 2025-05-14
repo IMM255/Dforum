@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ThreadsList from '../components/ThreadsList';
 import CategoryPopular from '../components/CategoryPopular';
-import UserActive from '../components/UserActive';
 import ThreadsInput from '../components/ThreadsInput';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -54,7 +53,7 @@ const HomePage = () => {
   }));
 
   return (
-    <section className="min-h-screen grid md:grid-cols-4 mt-10 place-items-center md:place-items-start mx-8 xl:mx-2">
+    <section className="min-h-screen grid md:grid-cols-4 my-10 place-items-center md:place-items-start mx-8 xl:mx-2">
       <CategoryPopular
         categories={categories}
         onCategoryClick={setSelectedCategory}
@@ -69,7 +68,6 @@ const HomePage = () => {
           neutralVotes={onNeutralVoteThread}
         />
       </div>
-      <UserActive />
     </section>
   );
 };

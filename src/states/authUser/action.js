@@ -1,4 +1,5 @@
 import api from '../../utils/api';
+import { startLoadingActionCreator, stopLoadingActionCreator } from '../isLoading/action';
 
 const ActionType = {
   SET_AUTH_USER: 'SET_AUTH_USER',
@@ -25,6 +26,7 @@ function unsetAuthUserActionCreator() {
 
 function asyncSetAuthUser({ email, password }) {
   return async (dispatch) => {
+    dispatch(startLoadingActionCreator());
     try {
       const token = await api.login({ email, password });
       api.putAccessToken(token);
@@ -32,6 +34,8 @@ function asyncSetAuthUser({ email, password }) {
       dispatch(setAuthUserActionCreator(authUser));
     } catch (error) {
       alert(error.message);
+    } finally {
+      dispatch(stopLoadingActionCreator());
     }
   };
 }

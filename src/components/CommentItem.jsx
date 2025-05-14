@@ -6,7 +6,6 @@ import { postedAt } from '../utils';
 
 const CommentItem = ({
   id,
-  comment,
   authUser,
   onUpVote,
   onDownVote,
@@ -69,20 +68,18 @@ const CommentItem = ({
 };
 
 CommentItem.propTypes = {
-  comment: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
-    createdAt: PropTypes.string.isRequired,
-    upVotesBy: PropTypes.arrayOf(PropTypes.string).isRequired,
-    downVotesBy: PropTypes.arrayOf(PropTypes.string).isRequired,
-    owner: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      avatar: PropTypes.string.isRequired,
-    }).isRequired,
-  }),
-  authUser: PropTypes.string,
+  id: PropTypes.string.isRequired,
+  authUser: PropTypes.string.isRequired,
   onUpVote: PropTypes.func.isRequired,
   onDownVote: PropTypes.func.isRequired,
+  upVotesBy: PropTypes.arrayOf(PropTypes.string).isRequired,
+  downVotesBy: PropTypes.arrayOf(PropTypes.string).isRequired,
+  owner: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    avatar: PropTypes.string.isRequired,
+  }).isRequired,
+  createdAt: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
 };
 
 export default CommentItem;

@@ -1,4 +1,8 @@
 import api from '../../utils/api';
+import {
+  startLoadingActionCreator,
+  stopLoadingActionCreator,
+} from '../isLoading/action';
 
 const ActionType = {
   RECEIVE_THREAD_DETAIL: 'RECEIVE_THREAD_DETAIL',
@@ -29,12 +33,15 @@ function clearThreadDetailActionCreator() {
 
 function asyncReceiveThreadDetail(threadId) {
   return async (dispatch) => {
+    dispatch(startLoadingActionCreator());
     dispatch(clearThreadDetailActionCreator());
     try {
       const detailThread = await api.getThreadDetail(threadId);
       dispatch(receiveThreadDetailActionCreator(detailThread));
     } catch (error) {
       alert(error.message);
+    } finally {
+      dispatch(stopLoadingActionCreator());
     }
   };
 }
@@ -81,11 +88,14 @@ function addCommentActionCreator(comment) {
 function asyncAddComment({ content }) {
   return async (dispatch, getState) => {
     const { detailThread } = getState();
+    dispatch(startLoadingActionCreator());
     try {
       const comment = await api.createComment({ content, threadId: detailThread.id });
       dispatch(addCommentActionCreator(comment));
     } catch (error) {
       alert(error.message);
+    } finally {
+      dispatch(stopLoadingActionCreator());
     }
   };
 }

@@ -10,9 +10,8 @@ const UserActive = () => {
     dispatch(asyncReceiveLeaderboards());
   }, [dispatch]);
 
-  console.log('leaderboard', leaderboards);
   return (
-    <div className="xl:px-12 w-full mt-6 md:mt-0 md:ms-6 xl:ms-0 ">
+    <div className=" w-[600px] m-auto mt-6">
       <h1 className="xl:text-4xl md:text-2xl text-xl  font-semibold text-center">
         Pengguna Aktif
       </h1>

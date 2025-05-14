@@ -22,7 +22,6 @@ const DetailPage = () => {
   useEffect(() => {
     dispatch(asyncReceiveThreadDetail(threadId));
   }, [threadId, dispatch]);
-  console.log('id', threadId);
 
   const onUpVoteThread = (id) => {
     dispatch(asyncUpVoteThreadDetail(id));
@@ -49,7 +48,7 @@ const DetailPage = () => {
     return null;
   }
   return (
-    <section className="grid mt-10 place-items-center mx-8 xl:mx-2">
+    <section className="grid my-10 place-items-center mx-8 xl:mx-2">
       <div className='border pb-10 md:w-[700px] '>
         <ThreadDetail
           {...detailThread}
@@ -60,9 +59,10 @@ const DetailPage = () => {
           downVoteComment={onDownVoteComment}
           neutralVotes={onNeutralizeVoteThread}
         />
-        <ThreadComment  createComment={onCommentThread} />;
+        <hr />
         <CommentList threadId={detailThread.id} comments={detailThread.comments} authUser={authUser.id}  upVoteComment={onUpVoteComment} downVoteComment={onDownVoteComment}
         />
+        <ThreadComment  createComment={onCommentThread} />;
       </div>
     </section>
   );
